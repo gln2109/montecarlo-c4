@@ -1,3 +1,5 @@
+module Board where
+
 
 import Data.Maybe
 
@@ -48,8 +50,3 @@ applyMoveList board player (col:cols) = applyMoveList (applyMove board player co
 testBoard :: (Board, Player)
 testBoard = (applyMoveList emptyBoard Red [3,3,2,4,2,4,1], Red)
 
-
-main :: IO ()
-main = do
-    putStrLn (boardString (fst testBoard))
-    --putStrLn (availableMoves testBoard)
