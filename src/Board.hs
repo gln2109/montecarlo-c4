@@ -1,44 +1,33 @@
 module Board where
 
-
 import Data.Maybe
 
 data Player = Red | Blue deriving (Eq, Show)
 type Cell = Maybe Player
 type Board = [[Cell]]
 
-boardSize :: (Int, Int) -- rows, cols
-boardSize = (6,7)
+boardRows, boardCols :: Int
+boardRows = 6
+boardCols = 7
 
+ -- generate empty board
 emptyBoard :: Board
-emptyBoard = replicate (fst boardSize) (replicate (snd boardSize) Nothing)
+emptyBoard = replicate boardRows (replicate boardCols Nothing)
 
-
+ -- return array of open cols
 availableMoves :: Board -> [Int]
-availableMoves board = [col | col <- [0..(snd boardSize)-1], isNothing (board !! 0 !! col)]
+availableMoves board = [col | col <- [0..boardCols-1], isNothing (board !! 0 !! col)]
 
+-- return new Board with move applied
 applyMove :: Board -> Player -> Int -> Board
 applyMove board player col =
-    case [row | row <- [0..(fst boardSize)-1], isNothing (board !! row !! col)] of
+    case [row | row <- [0..boardRows-1], isNothing (board !! row !! col)] of
         []        -> board
         emptyRows -> let row = maximum emptyRows
                          newRow = take col (board !! row) ++ [Just player] ++ drop (col+1) (board !! row)
                      in take row board ++ [newRow] ++ drop (row+1) board
 
-
---checkWin :: Board -> Maybe Player
---checkWin board =
-
-
-
-boardString :: Board -> String
-boardString board = unlines [concat [playerChar (board !! row !! col) ++ " " | col <- [0..(snd boardSize)-1]] | row <- [0..(fst boardSize)-1]] ++ "0 1 2 3 4 5 6"
-    where
-        playerChar Nothing = "."
-        playerChar (Just Red) = "R"
-        playerChar (Just Blue) = "B"
-
-
+-- recursively apply an array of moves, alternating players
 applyMoveList :: Board -> Player -> [Int] -> Board
 applyMoveList board _ [] = board
 applyMoveList board player (col:cols) = applyMoveList (applyMove board player col) (otherPlayer player) cols
@@ -46,7 +35,42 @@ applyMoveList board player (col:cols) = applyMoveList (applyMove board player co
         otherPlayer Red = Blue
         otherPlayer Blue = Red
 
+-- return a string representation of the board
+boardString :: Board -> String
+boardString board =
+    unlines [concat
+                [playerChar (board !! row !! col) ++ " " | col <- [0..boardCols-1]]
+                | row <- [0..boardRows-1]
+            ] ++ "0 1 2 3 4 5 6"
+    where
+        playerChar Nothing = "."
+        playerChar (Just Red) = "R"
+        playerChar (Just Blue) = "B"
 
-testBoard :: (Board, Player)
-testBoard = (applyMoveList emptyBoard Red [3,3,2,4,2,4,1], Red)
+-- return a winning player if one exists
+checkWin :: Board -> Maybe Player
+checkWin board = checkCells [(row,col) | row <- [0..boardRows-1], col <- [0..boardCols-1]]
+    where
+        checkFour row col drow dcol =
+            let lastRow = row + 3*drow
+                lastCol = col + 3*dcol
+            in if lastRow < 0 || lastRow > boardRows-1 || lastCol< 0 || lastCol > boardCols-1 then Nothing
+            else case board !! row !! col of
+                 Nothing     -> Nothing
+                 Just player ->
+                    let otherCells = [(board !! (row + d*drow) !! (col + d*dcol)) | d <-[1..3]]
+                    in if all (== Just player) otherCells then Just player else Nothing
 
+        checkDirs :: (Int,Int) -> [(Int,Int)] -> Maybe Player
+        checkDirs _ [] = Nothing
+        checkDirs cell (dir:dirs) =
+            case checkFour (fst cell) (snd cell) (fst dir) (snd dir) of
+                Nothing     -> checkDirs cell dirs
+                Just player -> Just player
+
+        checkCells :: [(Int, Int)] -> Maybe Player
+        checkCells [] = Nothing
+        checkCells (cell:cells) =
+            case checkDirs cell [(1,0),(0,1),(1,1),(1,-1)] of
+                Nothing     -> checkCells cells
+                Just player -> Just player
