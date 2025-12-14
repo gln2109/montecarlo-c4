@@ -1,8 +1,12 @@
+{-# LANGUAGE DeriveGeneric #-}
 module Board where
 
 import Data.Maybe
+import GHC.Generics (Generic)
+import Control.DeepSeq
 
-data Player = Red | Blue deriving (Eq, Show)
+data Player = Red | Blue deriving (Eq, Show, Generic)
+instance NFData Player
 otherPlayer :: Player -> Player
 otherPlayer Red = Blue
 otherPlayer Blue = Red

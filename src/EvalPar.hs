@@ -1,9 +1,10 @@
-module EvalSeq where
+module EvalPar where
 
 import Board
 import System.Random
 import Data.Function (on)
 import Data.List
+import Control.Parallel.Strategies
 
 simulate :: Board -> Player -> StdGen -> Maybe Player
 simulate board player gen =
@@ -21,11 +22,11 @@ evalMove :: Board -> Player -> Int -> Int -> (Int, Int)
 evalMove board player simulations move =
     let gens = [mkStdGen s | s <- [1..simulations]]
         newBoard = applyMove board player move
-        results = map (simulate newBoard (otherPlayer player)) gens
+        results = parMap rdeepseq (simulate newBoard (otherPlayer player)) gens
     in (move, length (filter (== Just player) results))
 
-bestMoveSeq :: Board -> Player -> Int -> Int
-bestMoveSeq board player simulations =
+bestMovePar :: Board -> Player -> Int -> Int
+bestMovePar board player simulations =
     let moves = availableMoves board
-        res = map (evalMove board player simulations) moves
-    in (fst (maximumBy (on compare snd) res))
+        winCounts = parMap rdeepseq (evalMove board player simulations) moves
+    in (fst (maximumBy (on compare snd) winCounts))
