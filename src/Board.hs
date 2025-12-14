@@ -3,9 +3,12 @@ module Board where
 import Data.Maybe
 
 data Player = Red | Blue deriving (Eq, Show)
+otherPlayer :: Player -> Player
+otherPlayer Red = Blue
+otherPlayer Blue = Red
+
 type Cell = Maybe Player
 type Board = [[Cell]]
-
 boardRows, boardCols :: Int
 boardRows = 6
 boardCols = 7
@@ -31,17 +34,14 @@ applyMove board player col =
 applyMoveList :: Board -> Player -> [Int] -> Board
 applyMoveList board _ [] = board
 applyMoveList board player (col:cols) = applyMoveList (applyMove board player col) (otherPlayer player) cols
-    where
-        otherPlayer Red = Blue
-        otherPlayer Blue = Red
 
 -- return a string representation of the board
 boardString :: Board -> String
 boardString board =
-    unlines [concat
-                [playerChar (board !! row !! col) ++ " " | col <- [0..boardCols-1]]
-                | row <- [0..boardRows-1]
-            ] ++ "0 1 2 3 4 5 6"
+    unlines [
+        concat [playerChar (board !! row !! col) ++ " " | col <- [0..boardCols-1]]
+        | row <- [0..boardRows-1]
+    ] ++ "0 1 2 3 4 5 6"
     where
         playerChar Nothing = "."
         playerChar (Just Red) = "R"

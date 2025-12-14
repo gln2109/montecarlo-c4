@@ -1,16 +1,19 @@
 module Main where
 
 import Board
+import EvalSeq
 
 main :: IO ()
 main = do
-    let testBoard = applyMoveList emptyBoard Red [3,3,2,4,2,4,1]
+    let testBoard = applyMoveList emptyBoard Red [3,3,2,4,1,4]
 
     putStrLn (boardString testBoard)
-    putStrLn (show (checkWin testBoard))
-    putStrLn (show (availableMoves testBoard))
 
-    let newBoard = applyMoveList testBoard Blue [3,0,3,3,3]
+    let bestMove = bestMoveSeq testBoard Red 5000
+    putStrLn (show bestMove)
+
+    let newBoard = applyMoveList testBoard Red [1,0,2,3]
     putStrLn (boardString newBoard)
-    putStrLn (show (checkWin newBoard))
-    putStrLn (show (availableMoves newBoard))
+
+    let newBestMove = bestMoveSeq newBoard Red 10000
+    putStrLn (show newBestMove)
