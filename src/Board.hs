@@ -45,7 +45,7 @@ boardString board =
     unlines [
         concat [playerChar (board !! row !! col) ++ " " | col <- [0..boardCols-1]]
         | row <- [0..boardRows-1]
-    ] ++ "0 1 2 3 4 5 6"
+    ]
     where
         playerChar Nothing = "."
         playerChar (Just Red) = "R"

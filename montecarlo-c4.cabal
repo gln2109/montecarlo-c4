@@ -16,3 +16,20 @@ executable test-c4
         , parallel
         , deepseq
     default-language:    Haskell2010
+
+executable benchmark
+    main-is: Bench.hs
+    other-modules:
+        Board
+        EvalSeq
+        EvalPar
+        EvalParOld
+    hs-source-dirs: src
+    ghc-options: -Wall -threaded -rtsopts -O2
+    build-depends:
+          base >=4.7 && <5
+        , random
+        , parallel
+        , deepseq
+        , time
+    default-language:    Haskell2010

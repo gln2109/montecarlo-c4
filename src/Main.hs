@@ -17,6 +17,6 @@ main = do
     forM_ testBoards (\(board, player) -> do
         putStrLn (boardString board)
         putStrLn ("Player: " ++ show player)
-        let bestMove = bestMovePar board player 5000
+        let bestMove = bestMovePar board player 5000 625
         putStrLn ("Column: " ++ show bestMove)
         )
