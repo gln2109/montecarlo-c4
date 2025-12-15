@@ -7,15 +7,17 @@ import Control.DeepSeq
 
 data Player = Red | Blue deriving (Eq, Show, Generic)
 instance NFData Player
-otherPlayer :: Player -> Player
-otherPlayer Red = Blue
-otherPlayer Blue = Red
 
 type Cell = Maybe Player
 type Board = [[Cell]]
+
 boardRows, boardCols :: Int
 boardRows = 6
 boardCols = 7
+
+otherPlayer :: Player -> Player
+otherPlayer Red = Blue
+otherPlayer Blue = Red
 
  -- generate empty board
 emptyBoard :: Board

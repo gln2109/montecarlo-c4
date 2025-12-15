@@ -23,7 +23,7 @@ executable benchmark
         Board
         EvalSeq
         EvalPar
-        EvalParOld
+        EvalChunk
     hs-source-dirs: src
     ghc-options: -Wall -threaded -rtsopts -O2
     build-depends:
