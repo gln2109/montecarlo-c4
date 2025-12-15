@@ -27,5 +27,5 @@ evalMove board player simulations move =
 bestMoveSeq :: Board -> Player -> Int -> Int
 bestMoveSeq board player simulations =
     let moves = availableMoves board
-        res = map (evalMove board player simulations) moves
-    in (fst (maximumBy (on compare snd) res))
+        winCounts = map (evalMove board player simulations) moves
+    in (fst (maximumBy (on compare snd) winCounts))

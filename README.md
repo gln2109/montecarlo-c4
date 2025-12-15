@@ -1,21 +1,25 @@
 # MonteCarlo-C4
-A Haskell Monte-Carlo evaluator for Connect-4.
+A Haskell Monte Carlo evaluator for Connect-4.
 #### Grayson Newell - gln2109
 
 ### Source Files:
 - **Board.hs** - Connect-4 board representation
 - **EvalSeq.hs** - Sequential Monte-Carlo evaluator for best move
-- **EvalParOld.hs** - Parallel Monte-Carlo evaluator
-- **EvalPar.hs** - Chunked parallel Monte-Carlo evaluator
-- **Benchmark.hs** - Timing script using test boards
-- **Main.hs** - 
+- **EvalPar.hs** - Parallel Monte-Carlo evaluator
+- **EvalChunk.hs** - Chunked parallel Monte-Carlo evaluator
+- **Main.hs** - Timing script using test boards
 
+### Requirements:
+#### Stack, GHC
 
 ### How to Run:
-
-Benchmark:
+Stack Setup:
 ```
-stack exec benchmark -- +RTS -N8
+stack build
+```
+Main Benchmark:
+```
+stack exec mcc4 -- +RTS -N8
 ```
 
 
