@@ -5,7 +5,7 @@ import Data.Maybe
 import GHC.Generics (Generic)
 import Control.DeepSeq
 
-data Player = Red | Blue deriving (Eq, Show, Generic)
+data Player = Red | Yellow deriving (Eq, Show, Generic)
 instance NFData Player
 
 type Cell = Maybe Player
@@ -18,8 +18,8 @@ boardCols = 7
 
 -- helper function for turn swap
 otherPlayer :: Player -> Player
-otherPlayer Red = Blue
-otherPlayer Blue = Red
+otherPlayer Red = Yellow
+otherPlayer Yellow = Red
 
  -- generate empty board
 emptyBoard :: Board
@@ -53,7 +53,7 @@ boardString board =
     where
         playerChar Nothing = "."
         playerChar (Just Red) = "R"
-        playerChar (Just Blue) = "B"
+        playerChar (Just Yellow) = "Y"
 
 -- return a winning player if one exists
 checkWin :: Board -> Maybe Player
