@@ -11,10 +11,12 @@ instance NFData Player
 type Cell = Maybe Player
 type Board = [[Cell]]
 
+-- set board size
 boardRows, boardCols :: Int
 boardRows = 6
 boardCols = 7
 
+-- helper function for turn swap
 otherPlayer :: Player -> Player
 otherPlayer Red = Blue
 otherPlayer Blue = Red

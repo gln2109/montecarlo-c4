@@ -6,6 +6,7 @@ import Data.Function (on)
 import Data.List
 import Control.Parallel.Strategies
 
+-- run a simulation and return the winner
 simulate :: Board -> Player -> StdGen -> Maybe Player
 simulate board player gen =
     case checkWin board of
@@ -18,6 +19,7 @@ simulate board player gen =
                     newBoard = applyMove board player (moves !! moveIndex)
                 in simulate newBoard (otherPlayer player) newGen
 
+-- count simulation wins for each move
 evalMove :: Board -> Player -> Int -> Int -> (Int, Int)
 evalMove board player simulations move =
     let gens = [mkStdGen s | s <- [1..simulations]]
@@ -25,6 +27,7 @@ evalMove board player simulations move =
         results = parMap rdeepseq (simulate newBoard (otherPlayer player)) gens
     in (move, length (filter (== Just player) results))
 
+-- return the move with the most wins
 bestMovePar :: Board -> Player -> Int -> Int
 bestMovePar board player simulations =
     let moves = availableMoves board
