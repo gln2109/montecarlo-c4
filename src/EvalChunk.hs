@@ -6,19 +6,6 @@ import Data.Function (on)
 import Data.List
 import Control.Parallel.Strategies
 
--- run a simulation and return the winner
-simulate :: Board -> Player -> StdGen -> Maybe Player
-simulate board player gen =
-    case checkWin board of
-        Just winner -> Just winner
-        Nothing ->
-            let moves = availableMoves board
-            in if moves == [] then Nothing
-            else
-                let (moveIndex, newGen) = randomR (0, length moves - 1) gen
-                    newBoard = applyMove board player (moves !! moveIndex)
-                in simulate newBoard (otherPlayer player) newGen
-
 -- run a chunk of simulations for a given move
 simulateChunk :: Board -> Player -> Int -> [StdGen] -> Int
 simulateChunk board player move gens =

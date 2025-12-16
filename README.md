@@ -22,12 +22,13 @@ stack build
 Benchmark w/ Test Boards:
 ```
 stack exec bench -- +RTS -N8
+stack exec bench -- +RTS -N8 -A32m          (gc optimization)
 ```
 Play Connect-4:
 ```
 stack exec play
-(OR)
 stack exec play -- +RTS -N8
+stack exec play -- +RTS -N8 -A32m
 ```
 
 

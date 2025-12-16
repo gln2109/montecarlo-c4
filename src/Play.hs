@@ -1,7 +1,7 @@
 module Main where
 
 import Board
-import EvalPar
+import EvalChunk
 import Text.Read (readMaybe)
 
 getMove :: Board -> IO Int
@@ -33,7 +33,7 @@ playGame board player = do
                     let playerBoard = applyMove board Red (playerMove-1)
                     playGame playerBoard Yellow
                 else do
-                    let evalMove = bestMovePar board Yellow 2048
+                    let evalMove = bestMoveChunk board Yellow 2048 2
                         evalBoard = applyMove board Yellow evalMove
                     putStrLn ("Yellow move: " ++ (show (evalMove+1)))
                     playGame evalBoard Red

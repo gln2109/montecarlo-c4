@@ -4,6 +4,7 @@ module Board where
 import Data.Maybe
 import GHC.Generics (Generic)
 import Control.DeepSeq
+import System.Random
 
 data Player = Red | Yellow deriving (Eq, Show, Generic)
 instance NFData Player
@@ -82,3 +83,16 @@ checkWin board = checkCells [(row,col) | row <- [0..boardRows-1], col <- [0..boa
             case checkDirs cell [(1,0),(0,1),(1,1),(1,-1)] of
                 Nothing     -> checkCells cells
                 Just player -> Just player
+
+-- run a simulation and return the winner
+simulate :: Board -> Player -> StdGen -> Maybe Player
+simulate board player gen =
+    case checkWin board of
+        Just winner -> Just winner
+        Nothing ->
+            let moves = availableMoves board
+            in if moves == [] then Nothing
+            else
+                let (moveIndex, newGen) = randomR (0, length moves - 1) gen
+                    newBoard = applyMove board player (moves !! moveIndex)
+                in simulate newBoard (otherPlayer player) newGen

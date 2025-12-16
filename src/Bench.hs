@@ -27,16 +27,23 @@ main = do
     end1 <- getCurrentTime
     putStrLn ("Time: " ++ show (diffUTCTime end1 start1))
 
-    putStrLn "\nParallel"
+    putStrLn "\nBasic Parallel"
     start2 <- getCurrentTime
     moves2 <- forM testBoards (\(board, player) -> return (bestMovePar board player sims))
     putStrLn ("Moves: " ++ show moves2)
     end2 <- getCurrentTime
     putStrLn ("Time: " ++ show (diffUTCTime end2 start2))
 
-    putStrLn "\nChunked Parallel"
+    putStrLn "\nChunked Parallel Size 256"
     start3 <- getCurrentTime
     moves3 <- forM testBoards (\(board, player) -> return (bestMoveChunk board player sims 256))
     putStrLn ("Moves: " ++ show moves3)
     end3 <- getCurrentTime
     putStrLn ("Time: " ++ show (diffUTCTime end3 start3))
+
+    putStrLn "\nChunked Parallel Size 2"
+    start4 <- getCurrentTime
+    moves4 <- forM testBoards (\(board, player) -> return (bestMoveChunk board player sims 2))
+    putStrLn ("Moves: " ++ show moves4)
+    end4 <- getCurrentTime
+    putStrLn ("Time: " ++ show (diffUTCTime end4 start4))
