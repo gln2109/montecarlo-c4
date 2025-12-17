@@ -9,8 +9,7 @@ import System.Random
 data Player = Red | Yellow deriving (Eq, Show, Generic)
 instance NFData Player
 
-type Cell = Maybe Player
-type Board = [[Cell]]
+type Board = [[Maybe Player]]
 
 -- set board size
 boardRows, boardCols :: Int
